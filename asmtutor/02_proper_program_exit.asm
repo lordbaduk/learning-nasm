@@ -6,8 +6,7 @@
 ;   $ ld -lSystem 02_proper_program_exit.o
 
 
-; LABELS    INSTRUCTIONS    OPERANDS    COMMENTS
-
+; LABELS    INSTRUCTIONS    OPERANDS           COMMENTS
 
 ; --------------------------------------------------------------- global directive
             global          _main
@@ -29,4 +28,3 @@ _main:
             section         .data
 message:
             db              "Hello, World", 10  ; note the new line at the end
-
