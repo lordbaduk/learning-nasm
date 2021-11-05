@@ -1,17 +1,12 @@
 ; --------------------------------------------------------------------------------
-; basic hello world example in NASM
-;
-; list of system calls on macos: /usr/include/sys/syscall.h
-; /System/Volumes/Data/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/syscall.h
+; https://asmtutor.com/#lesson1 "Hello, world!"
 ;
 ; assemble and link as follows:
-;    $ nasm -f macho64 hello_world.asm
-;    $ ld -lSystem hello_world.o
-; 
+;   $ nasm -f macho64 01_hello_world.asm
+;   $ ld -lSystem 01_hello_world.o
 
 
-; LABELS    INSTRUCTIONS    OPERANDS    COMMENTS
-
+; LABELS    INSTRUCTIONS    OPERANDS           COMMENTS
 
 ; --------------------------------------------------------------- global directive
             global          _main
@@ -25,9 +20,8 @@ _main:
             mov             rdx, 13             ; number of bytes
             syscall                             ; invoke operating system to
                                                 ; do the write
-            mov             rax, 0x02000001     ; system call for exit
-            xor             rdi, rdi            ; exit code 0
-            syscall                             ; invoke operating system to exit
+
+            ; will segfault here
 
 ; -------------------------------------------------------------------------- .text
             section         .data
