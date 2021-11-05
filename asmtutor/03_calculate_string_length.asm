@@ -27,7 +27,10 @@ nextchar:
             jmp             nextchar            ;      .. and jump to nextchar
 
 finished:
-            sub             rdx, rsi            ; arg3: number of bytes
+            sub             rdx, rsi            ; arg3: number of bytes (here computed by
+                                                ; subtracting the pointer to the string start
+                                                ; from the pointer to the string end, computed
+                                                ; by the loop above and stored in rdi)
             syscall
 
             mov             rax, 0x02000001     ; syscall exit
