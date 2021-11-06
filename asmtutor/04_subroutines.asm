@@ -29,7 +29,11 @@ _main:
             syscall
 
 ; ---------------------------------------------------------------------------------- function strlen
-; Takes as input a pointer to the start of a string (rdi) and computes its length (rax).
+; Takes as input a pointer to the start of a string and computes its length.
+; input
+;   * rdi: pointer to string (must be null terminated)
+; output
+;   * rax: string length
 strlen:
             push            rbx                 ; back up rbx
             mov             rbx, rdi            ; initialize rbx for local use: increment until
@@ -40,7 +44,7 @@ strlen:
 nextchar:
             cmp             byte [rbx], 0       ; end of string?
             jz              finished            ; yes: break from loop
-            inc             rbx                 ; no: increment by one byte and loop
+            inc             rbx                 ; no: increment pointer by one byte and loop
             jmp             nextchar
 
 finished:
