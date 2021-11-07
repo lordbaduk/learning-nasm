@@ -14,7 +14,6 @@
             section         .text
 
 _main:
-
             mov             rdi, message        ; argument to strlen
             call            strlen
             mov             rdx, rax            ; arg3: string length argument for write system call
