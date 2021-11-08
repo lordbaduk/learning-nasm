@@ -5,13 +5,13 @@
 slen:
     mov     rax, rdi
 
-nextchar:
+slen_nextchar:
     cmp     byte [rax], 0
-    jz      finished
+    jz      slen_done
     inc     rax
-    jmp     nextchar
+    jmp     slen_nextchar
 
-finished:
+slen_done:
     sub     rax, rdi
     ret
 
@@ -37,6 +37,33 @@ sprint:
     pop     rdx
 
     xor     rax, rax          ; return 0, no errors
+    ret
+
+; ------------------------------------------------------------------------------
+; int@rax sprintln(string@rdi)
+; prints the given string to the screen plus a terminating line feed (LF)
+; ------------------------------------------------------------------------------
+sprintln:
+    call    sprint
+
+    ; cmp     rax, 0
+    ; jne     sprintln_done     ; error during sprint
+
+    push    rsi               ; backup rsi
+    mov     rsi, 0Ah          ; store LF in register
+    push    rsi               ; push it to stack
+
+    mov     rax, 0x02000004   ; sys_write
+    mov     rdi, 1            ; arg1(rdi): file handle
+    mov     rsi, rsp          ; arg2(rsi): stack pointer points to LF character
+    mov     rdx, 1            ; arg3(rdx): number of bytes
+    syscall
+
+    pop     rsi               ; remove LF from stack
+    pop     rsi               ; restore original rsi value
+    xor     rax, rax          ; return 0, no errors
+
+; sprintln_done:
     ret
 
 ; ------------------------------------------------------------------------------

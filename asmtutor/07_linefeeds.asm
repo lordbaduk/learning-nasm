@@ -1,9 +1,9 @@
 ; ------------------------------------------------------------------------------
-; https://asmtutor.com/#lesson6 "NULL terminating bytes"
+; https://asmtutor.com/#lesson7 "Linefeeds"
 ;
 ; assemble and link as follows:
-;   $ nasm -f macho64 06_null_terminating_bytes.asm
-;   $ ld -lSystem 06_null_terminating_bytes.o
+;   $ nasm -f macho64 07_linefeeds.asm
+;   $ ld -lSystem 07_linefeeds.o
 
 %include    'functions.asm'
 
@@ -14,9 +14,9 @@
     section     .data
 
 message1:
-    db          "Hello world!", 0Ah, 0h
+    db          "Hello world!", 0h
 message2:
-    db          "Assembly is cool.", 0Ah, 0h
+    db          "Assembly is cool.", 0h
 
 ; ------------------------------------------------------------------------- code
 
@@ -25,12 +25,12 @@ message2:
 _main:
 
     mov         rdi, message1
-    call        sprint
+    call        sprintln
     cmp         rax, 0
     jne         quit_error
 
     mov         rdi, message2
-    call        sprint
+    call        sprintln
     cmp         rax, 0
     jne         quit_error
 
