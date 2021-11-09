@@ -45,9 +45,8 @@ sprint:
 ; ------------------------------------------------------------------------------
 sprintln:
     call    sprint
-
-    ; cmp     rax, 0
-    ; jne     sprintln_done     ; error during sprint
+    cmp     rax, 0
+    jne     sprintln_done     ; error during sprint
 
     push    rsi               ; backup rsi
     mov     rsi, 0Ah          ; store LF in register
@@ -63,7 +62,7 @@ sprintln:
     pop     rsi               ; restore original rsi value
     xor     rax, rax          ; return 0, no errors
 
-; sprintln_done:
+sprintln_done:
     ret
 
 ; ------------------------------------------------------------------------------
