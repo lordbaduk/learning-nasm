@@ -14,19 +14,20 @@
     section     .text
 
 _main:
-
+    ; rdi/arg1: argc (count)
+    ; rsi/arg2: argv (pointer)
     mov         rbx, rdi              ; use rbx for decrementing argc
 
 next_arg:
     cmp         rbx, 0x0              ; any args left?
-    je          done
+    jle         done
 
-    dec         rbx                   ; adjust offset multiplier
+    dec         rbx                   ; switch to next index
     mov         rdi, [rsi + 8 * rbx]  ; move argv[i] pointer from memory to rdi
     call        sprintln              ; print argv[i]
 
     cmp         rax, 0x0
-    jnz         done_errors
+    jne         done_errors
     jmp         next_arg
 
 done_errors:
