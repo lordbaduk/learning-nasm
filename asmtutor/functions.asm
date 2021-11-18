@@ -6,13 +6,14 @@ slen:
     mov     rax, rdi
 
 slen_nextchar:
-    cmp     byte [rax], 0
+    cmp     byte [rax], 0   ; is this the NULL byte terminating the string?
     jz      slen_done
-    inc     rax
+    inc     rax             ; no, so try the next one.
     jmp     slen_nextchar
 
 slen_done:
-    sub     rax, rdi
+    sub     rax, rdi        ; string length = pointer to terminating \0 minus
+                            ; pointer to string start
     ret
 
 ; ------------------------------------------------------------------------------
