@@ -41,6 +41,39 @@ sprint:
     ret
 
 ; ------------------------------------------------------------------------------
+; int@rax iprint(number@rdi)
+; converts the given decimal number to a string and prints it to the screen
+; ------------------------------------------------------------------------------
+iprint:
+    push    rbx               ; backup rbx
+    mov     rbx, rsp          ; backup stack pointer
+
+    xor     rdx, rdx          ; clear high bits of rdx:rax 128 bits dividend
+    mov     rax, rdi          ; dividend in rax
+    mov     rsi, 0x0A         ; divisor=10 (64 bits) as argument to idiv
+
+    dec     rsp               ; add one byte to stack
+    mov     byte [rsp], 0x0   ; move NULL character (1 byte) to stack
+
+iprint_divloop:
+    idiv    rsi               ; signed division: quotient in rax, remainder in rdx
+    add     rdx, 0x30         ; add 48 to remainder to obtain ASCII encoding
+    dec     rsp               ; add one byte to stack
+    mov     byte [rsp], dl    ; nb: dl is the 0-byte in rdx
+
+    xor     rdx, rdx          ; clear high bits of dividend in next loop
+    cmp     rax, 0x0          ; if quotient is not null, do next loop
+    jne     iprint_divloop
+
+iprint_done:
+    mov     rdi, rsp          ; the complete string starts at the stack pointer
+    call    sprintln
+
+    mov     rsp, rbx          ; restore stack pointer
+    pop     rbx               ; restore rbx value
+    ret
+
+; ------------------------------------------------------------------------------
 ; int@rax sprintln(string@rdi)
 ; prints the given string to the screen plus a terminating line feed (LF)
 ; ------------------------------------------------------------------------------
