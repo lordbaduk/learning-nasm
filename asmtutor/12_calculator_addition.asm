@@ -16,7 +16,8 @@
 _main:
 
     mov         rax, 0x10
-    add         rax, 0x10
+    mov         rbx, 0x10
+    add         rax, rbx
     mov         rdi, rax
 
     call        iprint
