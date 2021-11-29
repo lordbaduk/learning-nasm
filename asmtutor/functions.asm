@@ -76,6 +76,63 @@ iprint_done:
     ret
 
 ; ------------------------------------------------------------------------------
+; int@rax iprint_signed(integer@rdi)
+; prints integers from rdi including a '-' character for negative numbers.
+; ------------------------------------------------------------------------------
+iprint_signed:
+    push    rdi                     ; some back-ups
+    push    rbx
+    mov     rbx, rdi                ; keep a copy of the input number
+
+    test    rdi, rdi
+    jge     iprint_signed_absnum    ; zero or a positive number can be printed "as-is"
+
+iprint_signed_sign:
+    mov     rax, 0x2D
+    push    rax
+    mov     rax, 0x02000004  ; sys_write
+    mov     rdi, 1           ; arg1(rdi): file handle
+    mov     rsi, rsp         ; arg2(rsi): character
+    mov     rdx, 1           ; arg3(rdx): number of bytes
+    syscall
+    pop     rax
+
+    ; mov     byte [rsp-1], 0x00
+    ; mov     byte [rsp-2], 0x2D
+    ; mov     rdi, rsp
+    ; sub     rdi, 0x2
+
+    mov     rdi, rbx
+    call    twos_complement
+    mov     rdi, rax
+
+iprint_signed_absnum:
+    call    iprint
+
+    pop     rbx
+    pop     rdi
+    ret
+
+; ------------------------------------------------------------------------------
+; rax twos_complement(rdi)
+; create the two's complement of the number in rdi
+; ------------------------------------------------------------------------------
+twos_complement:
+    call    flip_bits
+    add     rax, 0x1
+    ret
+
+; ------------------------------------------------------------------------------
+; rax flip_bits(rdi)
+; flips all bits in rdi (result in rdi)
+; ------------------------------------------------------------------------------
+flip_bits:
+    mov     rax, -1     ; create a bitmask of all ones in rax (two's complement
+                        ; of -1 is all ones)
+    xor     rax, rdi    ; invert
+    ret
+
+; ------------------------------------------------------------------------------
 ; int@rax sprintln(string@rdi)
 ; prints the given string to the screen plus a terminating line feed (LF)
 ; ------------------------------------------------------------------------------
